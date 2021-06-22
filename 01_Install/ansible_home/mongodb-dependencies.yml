@@ -1,0 +1,22 @@
+- hosts: nodes
+  become: yes
+  tasks:
+
+  - name: Import the public key used by the package management system.
+    apt_key:
+      url: https://www.mongodb.org/static/pgp/server-4.4.asc
+      state: present 
+
+  - name: Create a list file for MongoDB
+    lineinfile:
+      path: /etc/apt/sources.list.d/mongodb-org-4.4.list
+      line: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse"
+      create: yes
+
+  
+  - name: Install the MongoDB packages.
+    apt:
+      pkg:
+      - mongodb-org
+      update_cache: yes
+
